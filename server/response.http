@@ -1,0 +1,55 @@
+DELETE http://localhost:5000/api/posts/61e1354b8320801ef048c9fc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWUxMzRiOTgzMjA4MDFlZjA0OGM5ZjciLCJpYXQiOjE2NDIxNDk1NzV9.KUy_Fm2rIEhZzfdyBb44BhiCIdihYBTIc_mKXKdAxwc
+
+###
+
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "bob",
+    "password": "bob"
+}
+
+
+###
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "son",
+    "password": "son",
+
+}
+
+###
+POST http://localhost:5000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWUxMzRiOTgzMjA4MDFlZjA0OGM5ZjciLCJpYXQiOjE2NDI0ODU3NDB9.2BCgb_dHG5YyK6YLN_zhui_cZNIE7W8gGnkfcK0GZwM
+
+{
+   "title": "react5",
+    "description": "react5",
+    "url": "react.com",
+    "status": "TO LEARN"
+}
+
+###
+GET http://localhost:5000/api/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWUxMzRiOTgzMjA4MDFlZjA0OGM5ZjciLCJpYXQiOjE2NDIxNDk1NzV9.KUy_Fm2rIEhZzfdyBb44BhiCIdihYBTIc_mKXKdAxwc
+
+###
+PUT http://localhost:5000/api/posts/61e1354b8320801ef048c9fc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWUxMzRiOTgzMjA4MDFlZjA0OGM5ZjciLCJpYXQiOjE2NDIxNDk1NzV9.KUy_Fm2rIEhZzfdyBb44BhiCIdihYBTIc_mKXKdAxwc
+
+ {
+     "title": "update react",
+     "description": "update",
+     "url": "update.com",
+     "status": "LEARNING"
+ }
+
+
+

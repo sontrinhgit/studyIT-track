@@ -5,57 +5,70 @@ const router = express.Router();
 const User = require("../models/User");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const verifyToken = require('../middleware/auth')
+
+// @route GET api/auth
+// @desc Check if the user log in or not
+// @access Public
+router.get('/', verifyToken, async(req,res) => {
+  try {
+    const user = await User.findById(req.userId).select('-password')
+    if(!user)
+    return res.sendStatus(400).json({success: false, message: 'user not found'})
+
+    res.json({success: true, user})
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+})
+
+
 
 // @route POST api/auth/register
 // @desc register user
 // @access Public
 // nc voi DB pahi dung async await
-router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
+router.post('/register', async (req, res) => {
+	const { username, password } = req.body
 
-  if (!username || !password)
-    return res
-      .sendStatus(400)
-      .json({ success: false, message: "Mising username and/or password" });
+	// Simple validation
+	if (!username || !password)
+		return res
+			.status(400)
+			.json({ success: false, message: 'Missing username and/or password' })
 
-  try {
-    //check for existing user
-    const user = await User.findOne({ username: username });
+	try {
+		// Check for existing user
+		const user = await User.findOne({ username })
 
-    if (user)
-      return res
-        .sendStatus(400)
-        .json({ success: false, message: "Username is already taken" });
+		if (user)
+			return res
+				.status(400)
+				.json({ success: false, message: 'Username already taken' })
 
-    //All good
-    const hashedPassword = await argon2.hash(password);
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-    });
-    await newUser.save();
+		// All good
+		const hashedPassword = await argon2.hash(password)
+		const newUser = new User({ username, password: hashedPassword })
+		await newUser.save()
 
-    //Return token
-    //day chinh la id duoc tao trong database tu newUSer, moi user se duoc default tao ra mot new __Id
-    //sign nhan vao mot payload va secret key
-    const accessToken = jwt.sign(
-      { userId: newUser.__id },
-      process.env.ACCESS_TOKEN_SECRET
-    );
+		// Return token
+		const accessToken = jwt.sign(
+			{ userId: newUser._id },
+			process.env.ACCESS_TOKEN_SECRET
+		)
 
-    //res.json thi status se tu dong la 200
-    res.json({
-      success: true,
-      message: "User created successfully",
-      accessToken,
-    });
-  } catch (error) {
-    //round nay la k biet bi loi gi
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-});
-
+		res.json({
+			success: true,
+			message: 'User created successfully',
+			accessToken
+		})
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({ success: false, message: 'Internal server error' })
+	}
+})
 // @route POST api/auth/login
 // @desc login user
 // @access Public

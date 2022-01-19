@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const authRouter = require('./router/auth')
 const postRouter = require('./router/post')
 
@@ -20,6 +21,7 @@ const app = express()
 
 //de express nhan duoc de lieu tra ve la json 
 app.use(express.json())
+app.use(cors())
 
 app.use('/api/auth', authRouter)
 
